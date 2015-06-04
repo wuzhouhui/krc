@@ -1,0 +1,96 @@
+% vim: ts=4 sts=4 sw=4 et
+% preface here.
+
+\chapter{前言}
+在 \textit{The C Programming Language} 在1978年出版之后, 计算机已经经历了
+许多变化. 大型计算机变得得更大, 而个人计算机也拥有了十年前大型机的运算能力.
+在这段时间内, C 也有些许变化, 虽然不多, 但是与最初作为UNIX操作系统语言相比
+已经, C语言已经传播得非常广泛了.
+
+鉴于C语言变得越来越流行, 并且在这些年间该语言也发生了一些变化, 以及某些组织
+开发的编译器, 越来越有必要对语言作出更加精确并且符合现代观点的定义, 与第一
+版相比. 1983年, 美国国家标准组织建立了一个委员会,
+指在建立一个\begin{myquotation}明确的, 独立%
+于机器的C语言\end{myquotation}, 同时保留它的精髓. 结果就是产生的C语言的 
+ANSI标准.
+
+标准明确了第一版中提到但没有详细描述的解释, 例如结构与与枚举体赋值. 它提出
+一种新的函数定义形式, 该形式允许在使用时交叉检验函数的定义. 它指定了一个标
+准函数库, 字符串操作和一个类似的工作. 它使得原来比较模糊的特点更加地明确,
+同时显式地说明要保留语言的机器无关性.
+
+\textit{The C Programming Language} 第2版用ANSI标准来描述C语言, 对于该语言
+已经演变的部分, 我们会用一种新格式来写出来. 对于大部分, 这并没有什么本质的
+区别; 最主要的区别就是函数定义与声明的格式. 现代的编译已经支持标准中的大
+多数特性.
+
+我们尽量保持与第1版一样的简洁性. C 不是一种很复杂的语言, 用一本很厚的书籍来
+描述它并不合适. 对于C语言的重要特性(例如指针, 它是C语言的精髓)我们会着重
+阐述. 我们已经增加并修改了许多示例. 例如, 如何对待复杂的声明是由程序添加的,
+该程序会把声明转换到字中, 反之亦然. 与以前一样, 所有的例如都被测试过.
+
+附录A中的参考手册并不是标准, 但是我们想要在更小的空间中传送标准的重要之处.
+这于程序员来说这很好理解, 但对于编译器开发者来说这此手册中的内容并不等同于
+定义, 定义的责任属于标准. 附录B总结了标准库函数. 同样, 该参考只对程序员有意
+义, 而不针对于函数实现人员. 附件C简单地概括了一下自从第一版以来, C语言所发
+生的变化.
+
+正如我们在本书第一版前言中所说的那样, "C wears well as on's experience with
+it grows". 在十多年的实践中, 我们对这名话感受颇深. 我们希望这本书可以帮助你
+学好并用好C语言.
+
+我们非常感谢那些帮助我们写这本书的朋友. Jon Bently, Doug Gwyn, Doug McIlroy,
+Peter Nelson 和 Rob Pike 对本书的草稿提出了许多宝贵的意见. 我们也很感谢
+Al Aho, Dennis Allison, Joe Campbell, G.R. Emlin, Karen Fortgang, Allen
+Holub, Andrew Hume, Dave Kristol, John Linderman, Dave Prosser, Gene 
+Spafford 和 Chris van Wyk, 以上这些人非常认真地读了这本书. 我们也从以下这
+些人收到了许多有助的建议, 他们是 Bill Cheswick, Mark Kernighan, Andy 
+Koenig, Robin Lake, Tom London, Jim Reeds, Clovis Tondo 和 Peter Weinberger.
+Dave Prosser 回到了有关ANSI标准的许多细节问题.  我们使用了 Bjarne Strostrup
+的 C++翻译器测试了我们的程序, 并且 Dave Kristol 向我们提供了一个 ANSI C 
+编译器来做最终的测试. Rich Drechsler 在打字方面帮助很大.
+
+感谢所有的人.
+ 
+Brian W.Kernighan
+
+Dennis M. Ritchie
+
+\chapter{第一版前言}
+C语言是一种通用编程语言, 支持表达式, 现代控制流, 数据结构, 以及一系列的操作
+符. C语言并不是一种\begin{myquotation}非常高级的编程语言\end{myquotation}, 
+它并不\begin{myquotation}大\end{myquotation}, 以不是专门针对某一应用
+领域. 由于C语言缺少许多限制以及通用性, 使得它与所谓的更厉害的语言相比, 在
+完成许多任务上更加的方便与高效.
+
+C语言最开始是为了在PDP-11上实现UNIX操作系统, 主要是由 Dennis Ritchie 完成
+的. 操作系统, C 编译器, 所有重要的 UNIX 应用程序(包括所有的用来写这本书的
+软件)都是由 C 开发的. 除此之外, C 还在其他机器上开发了编译器, 包括 IBM
+System/370, Honeywell 6000 和 Interdate 8/32. C 语言并不特定了某些硬件或
+系统, 然后, 开发那些将要在不同的, 但是支持 C 语言的机器上运行的程序是很容易
+的.
+
+这本书指在帮助读者使用 C 语言开发程序. 该书包含一个教程, 能让新手尽快地起步,
+根据 C 语言的几个主要特性来划分章节, 另外还有一个参考手册. 读者主要地工作
+就是阅读, 写代码和回顾, 而不是仅仅拘泥于语法上. 在大多数情况下, 示例程序都
+完整真实的程序, 而不是一个片断. 所有的例子都被测试过. 除了展示如何高效地使
+用语言外, 我们也会尽可能地描述一些有用的算法和设计开发风格或原则.
+
+这本书并不是一个介绍编程的手册; 我们假设读者已经拥有一些编程的基本知识, 例
+如变量, 赋值语句, 循环和函数. 无论如何, 一个初学者应该有能力阅读下去, 向其
+他人寻求帮助也是一个不错的方法.
+
+在我们的实践中, C 已经展现出了它的优雅, 丰富和多功能. 它很容易学习, 实践越
+丰富, 它就表现地越好. 我们希望这本书可以帮助你很好地使用它.
+
+许多意见与建议已经添加进了这本书, 而且我们也很乐于这么做. 尤其是 Mike 
+Bianchi, Jim Blue, Stu Feldman, Doug McIlroy Bill Roome, Bob Rosin 和 Larry
+Rosler, 他们都非常认真地阅读了资料. 我们同时也感谢 Al Aho, Steve Bourne, 
+Dan Dvorak, Chuck Haley, Debbie Haley, marion harris, Rick Holt, Steve 
+Johnson, John Mashey, Bob Mitze, Ralph Muha, Peter Nelson, Elliot Pinson, 
+Bill plauger, Jerry Spivack, Ken Thompson 和 Perter Weinberger, 他们在不同
+阶段都提出了宝贵的意见. 同时也感谢 Mile Lesk 和 Joe Ossanna 的帮助与打字.
+
+Brian W. Kernighan
+
+Dennis M. Ritchie

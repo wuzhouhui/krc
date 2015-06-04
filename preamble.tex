@@ -1,0 +1,91 @@
+% vim: ts=4 sts=4 sw=4 et
+% preamble here.
+
+\documentclass[nofonts, a4paper, oneside, 10pt]{book}
+
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{fontspec}
+\usepackage{upquote}
+\usepackage{xeCJK}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{verbatim}
+
+% 整体页面尺寸
+\geometry{ left = 3cm, right = 3cm, bottom = 2cm }
+
+% 设置中文字体
+\setCJKmainfont[Scale=0.9, BoldFont=WenQuanYi Zen Hei]{AR PLBaosong2GBK Light}
+\setCJKsansfont[Scale=0.9]{WenQuanYi Zen Hei}
+\setCJKmonofont[Scale=0.9]{AR PL UMing CN}
+
+% 设置英文字体
+\setmainfont{FreeSerif}
+\setsansfont{FreeSans}
+\setmonofont{FreeMono}
+
+% 中文的 \emph, 'cemph' short for 'chinese emph'
+\setCJKfamilyfont{kai}{AR PL UKai CN}
+\newcommand\cemph[1]{{\small{\CJKfamily{kai}{#1}}}}
+
+% 为中文设置的双引号
+\newenvironment{myquotation}
+    {\phantom{ }\CJKsetecglue{}"}
+    {"}
+
+% 书中经常出现的词
+\newcommand\fahr{{\texttt{fahr}}}
+
+% C 语言关键字
+\newcommand\printf{{\texttt{printf}}}
+\newcommand\scanf{{\texttt{scanf}}}
+\newcommand\cint{{\texttt{int}}}
+\newcommand\cfor{{\texttt{for}}}
+\newcommand\cwhile{{\texttt{while}}}
+\newcommand\cdefine{{\texttt{\#define}}}
+\newcommand\cgetchar{{\texttt{getchar}}}
+\newcommand\cputchar{{\texttt{putchar}}}
+\newcommand\cchar{{\texttt{char}}}
+\newcommand\cmain{{\texttt{main}}}
+\newcommand\clong{{\texttt{long}}}
+\newcommand\cdouble{{\texttt{double}}}
+\newcommand\cfloat{{\texttt{float}}}
+\newcommand\cif{{\texttt{if}}}
+\newcommand\celse{{\texttt{else}}}
+\newcommand\cswitch{{\texttt{switch}}}
+\newcommand\creturn{{\texttt{return}}}
+\newcommand\cvoid{{\texttt{void}}}
+\newcommand\cstatic{{\texttt{static}}}
+\newcommand\cextern{{\texttt{extern}}}
+\newcommand\csigned{{\texttt{signed}}}
+\newcommand\cunsigned{{\texttt{unsigned}}}
+\newcommand\cconst{{\texttt{const}}}
+\newcommand\cshort{{\texttt{short}}}
+\newcommand\cenum{{\texttt{enum}}}
+
+% 习题格式
+\newcounter{exercnt}
+\numberwithin{exercnt}{chapter}
+\newcommand\exercise{\stepcounter{exercnt}{\textbf{习题\theexercnt}}}
+
+% 标题信息
+\title{The C Programming Lauguage \\ 2nd Edition}
+\author{Brian W.Kernighan \and Dennis M.Ritchie}
+\date{\today}
+
+% 超链接格式
+\hypersetup{
+    pdfborder = 0 0 0,              % 超链接无彩色边框
+    bookmarksnumbered = true,       % 目录书签带编号
+}
+
+% 代码环境
+\newenvironment{myverbatim}%
+    {\linespread{0.85}\verbatim}%
+    {\endverbatim}
+
+% 伪码环境的行距, 与代码环境相同
+\newenvironment{mypsudo}%
+    {\medskip\begin{spacing}{0.85}}
+    {\end{spacing}\medskip}

@@ -1,0 +1,1322 @@
+% vim: ts=4 sts=4 sw=4 et
+% chapter 1
+
+\chapter{教程式的介绍}\label{chap_tuto}
+让我们开始一个对 C 的快速介绍. 我们的目标是在真实的程序中展现语言最核心的特
+点, 但是不会陷入到语言的细节, 规则与异常中. 在这一点上, 我们不会去完整或者
+精确地描述(这一点会到正确的例子时再去详述). 我们会尽快让读者到达这样的水平:
+可以写出有用的程序, 为了达到这样的水平, 我们要把重点放在基础上: 变量与常量,
+算术表达式, 控制流, 函数, 输入和输出的基本原理. 我们计划在这章忽略关于 C 的
+重要特点, 而这些特点对于写大程序来说是非常重要的. 这些特点包括指针, 结构体,
+C 的操作符, 几个控制流语句, 以及标准库函数.
+
+这种编排方案有他的缺点. 值得注意的是, 关于任何特性的完整故事并不会出现在这
+本书中, 教程会尽量简洁, 可能会造成误解. 由于示例程序并没有用到 C 语言的全部
+力量, 能够用到 C 语言的全部特性的程序不够简洁. 我们会尽量减少由于前而造成的
+影响, 但是我们会有所提醒. 另外一个缺点是之后的一章我们会对这章的内容有所重
+复. 我们期望重复会帮助到你, 而不是让你感到厌烦.
+
+在任何情况下, 经验丰富的程序员应该有能力从本章的材料中推断出对他们编程有益
+的东西. 初学者应该写一些小的, 类似的程序来补充. 两人者都可以使用这些示例作
+为框架, 通过这些框架来理解描述的细节, 而这些细节会在第\ref{chap_toe} 章中提到.
+
+\section{开始}
+学习一门新的编程语言的唯一方法就是用它来写程序. 第一个程序对所有编程语言来
+说都是同一个:
+
+\textit{Print the words}
+
+\verb"hello, world"
+
+这是一个大障碍; 为了跨越这个障碍, 你必须要创建一个程序文本, 成功地编译它, 
+加载它, 运行它, 并且找到它的输出. 掌握了这此机械化的细节, 其他的事情就相对
+容易了.
+
+在 C 语言中, 打印 \begin{myquotation}\verb"hello, world"\end{myquotation}
+的程序是
+\begin{myverbatim}
+#include <stdio.h>
+
+main()
+{
+    printf("hello world\n");
+}
+\end{myverbatim}
+
+如何运行这个程序取决于你所用的系统. 作为一个特定的例子, 在 UNIX 系统中在一
+个文件(文件名以\begin{myquotation}\verb".c"\end{myquotation}结尾)创建一个%
+程序, 例如 \verb"hello.c", 然后用下而这个命令来编译它:
+
+\verb"cc hello.c"
+
+如果你没有搞糟任何东西, 例如漏了一个字母或是拼写错了什么, 编译过程会很安静
+地进行, 并且生成一个叫作 \verb"a.out" 的可执行文件. 如果你输入以下命令来运
+行程序:
+
+\verb"a.out"
+
+它将会输出:
+
+\verb"hello, world"
+
+在其他的系统上, 规则可能会有些不同, 具体情况具体分析.
+
+现在, 开始解释一下这个程序. 一个 C 语言程序, 无论它有多大, 都是由%
+\cemph{变量}和\cemph{函数}组成的. 一个函数包括\cemph{语句}, 语句指定了将
+要被计算的操作, 以及计算期间存值的变量. C 语言的函数类似于 Fortran 中
+的子程序和函数的概念, 也类似于 Pascal 中的例程和函数. 我们的例子是一个叫
+作 \verb"main"的函数. 当然你们也可以给任何你喜欢的名字, 但是 \verb"main"很
+特殊----你的程序是从 \verb"main"开始执行的.  这意味着任何一个程序都要有一个
+ \verb"main"在某个地方.
+
+\verb"main"通常会调用其他函数来完成工作, 这些函数有些是你写的, 有些是库函数
+提供的. 程序中的第一行,
+
+\verb"#include <stdio.h>"
+
+告诉编译器去包含关于标准IO的库信息; 这一行经常出现在许多的 C 语言源代码中.
+标准库函数在第七章和附件B中描述.
+
+在函数之间传递数据的一个方法是在调用函数时提供给它一系列的值, 这些值称为
+\cemph{参数}. 函数名之后的圆括号包裹住了参数列表. 在这个例子中, \verb"main"
+被定义为一个没有参数的函数, 这是通过声明一个空列表 \verb"( )" 来实现的.
+
+\begin{myverbatim}
+#include <stdio.h>              /* include information about standart */
+/* library */
+main()                          /* define a function called main 
+                                   that received no argument values */
+
+{                               /* statements of main are enclosed
+                                   in braces */
+    printf("hello world\n");    /* main calls library function printf 
+                                   to print this sequence of chacters
+                                   \n represents the newline chacters */
+}
+\end{myverbatim}
+
+\begin{center}\textbf{第一个 C 程序}\end{center}
+
+函数的语句被包围在花括号 \verb"{ }" 之中. 函数 \verb"main" 只包含一个语句,
+
+\verb=printf("hello, world\n");=
+
+% XXX 如果包含 "hello, world" 的那句话太长的话, 该行也会过长, 会超出页面
+函数通过函数名调用, 后跟圆括号括起来的参数列表, 调用 \printf 
+使用的参数是 \verb="hello, world\n"=. \printf 是一个库函数, 它的作用
+是打印输出, 在这里是将一个用双引号括起来的字符串输出.
+
+被双引号括起来的字符序列, 例如 \verb="hello, world\n"=, 叫作\cemph{字符串}%
+或\cemph{字符串常量}. 我们使用字符串的唯一场合是作为 \printf 或其他
+函数的参数.
+
+字符串中的序列 \verb"\n" 是 C 语言的一个记号, 叫作\cemph{换行符}, 它的作用是
+在打印完后, 将输出提到下一行的左边空白. 如果不没有输入 \verb"\n"
+(这值得一试), 你会发现打印完后, 没有换到下一行. 你必须使用 \verb"\n" 在
+\printf 的参数中包含进换行符; 如果你写成了下面这个样子
+\begin{myverbatim}
+printf("hello, world 
+");
+\end{myverbatim}
+C 编译器就会产生一个错误信息.
+
+\printf 不会自动提供一个换行符, 所以可以通过分阶段地若干次调用来产生
+一个输出. 我们的第一个程序也可以写成这个样子
+\begin{myverbatim}
+#include <stdio.h>
+
+main()
+{
+    printf("hello, ");
+    printf("world");
+    printf("\n");
+}
+\end{myverbatim}
+来产生相同的输出.
+
+注意 \verb"\n" 仅仅代表一个字符. 一个\cemph{转义序列}, 比如 \verb"\n", 提供
+了一种通用和可扩展的方法, 来表示一些不可输入或不可见的字符. 这些字符包括
+制表符 \verb"\t", 退符符 \verb"\b", 双引号 \verb="= 和反斜杆 \verb"\\".
+完整的列表在第2.3节.
+
+\exercise 在你的系统上运行程序 \verb="hello, world"=, 尝试删除掉程序中的某
+些代码, 看看编译器会报什么错误.
+
+\exercise 实验一下, 当 \printf 的参数包含不同的转义字符 \verb"\"%
+\textit{c}时( \textit{c} 是上文中没有列出的字符), 会发生什么.
+
+\section{变量和数学表达式}
+下面一个程序利用公式 $^\circ{C} = (5/9)(^\circ{F}-32)$ 来打印下面这张表格, 
+这张表格包含了温度的摄氏表示及与其对应的华氏表示:
+\begin{myverbatim}
+1       -17
+20      -6
+40      4
+60      15 
+80      26
+100     37 
+120     48
+140     60 
+160     71
+180     82
+200     93
+220     104 
+240     115 
+260     126 
+280     137
+300     148
+\end{myverbatim}
+
+这个程序仍然由一个单独的函数 \verb"main" 构成. 它要比打印 \verb"hello, world"
+的程序要长一些, 但并不复杂. 在这里介绍几个新概念, 包括注释, 声明, 变量, 
+算术表达式, 循环和格式输出.
+\begin{myverbatim}
+#include <stdio.h>
+/*
+ * print Fahrenheit-Celsius table 
+ * for fahr = 0, 20, ..., 300 
+ */
+ main()
+ {
+    int fahr, celsius;
+    int lower, upper, step;
+
+    lower   = 0;    /* lower limit of temperature scale */
+    upper   = 300;  /* upper limit */
+    step    = 20;   /* step size */
+
+    fahr = lower;
+    while (fahr <= upper) {
+        celsius = 5 * (fahr - 32) / 9;
+        printf("%d\t%d\n", fahr, celsius);
+        fahr = fahr + step;
+    }
+ }
+\end{myverbatim}
+
+
+这四行
+\begin{myverbatim}
+/*
+ * print Fahrenheit-Celsius table 
+ * for fahr = 0, 20, ..., 300 
+ */
+\end{myverbatim}
+是\cemph{注释}, 在这个情况下是在简短地解释这个程序在做什么. \verb"/*" 与
+\verb"*/" 之间的任意都会被编译器忽略; 它们的作用仅仅是让程序更容易地被人
+理解. 注释可以出现在任何空白, 制表符或换行符可以出现的地方.
+
+在 C 语言中, 所有的变量必须先声明再使用, 声明通常是在函数的开始位置, 先于任
+何可执行语句之前. 一个\cemph{声明}宣告了变量的属性; 它由名字和一连串的变量
+组成, 例如 
+\begin{myverbatim}
+int fahr, celsius;
+int lower, upper, step;
+\end{myverbatim}
+类型 \verb"int" 意味着后面列出的变量是整数; 反面是 \verb"float", 意味着浮点
+数, 等等, 数字可能含有可分段的部分. \verb"int" 与 \verb"float" 的表示范围
+取决于你所用的机器: 16位的 \verb"int" 在-32768到+32767之间, 这是很常见的,
+另外还有32位长的 \verb"int". 一个 \verb"float" 的典型字长为32位, 大小范围在
+$10^{-38}$至$10^{38}$之间.
+
+C 语言在 \verb"int" 与 \verb"float" 之外, 还提供了几种不同的类型, 包括:
+\begin{figure}[ht]
+    \centering
+\begin{tabular}{|l|l|}
+    \hline
+    \verb"char"     & 字符, 单字节长    \\ \hline
+    \verb"short"    & 短整型            \\ \hline
+    \verb"long"     & 长整型            \\ \hline
+    \verb"double"   & 双精度浮点        \\ \hline
+\end{tabular}
+\end{figure}
+这些数据类型的长度同样是跟机器相关的. 这里还有由这些基本类型进一步衍生的%
+\cemph{数组}, \cemph{结构体}和\cemph{共用体}, 指向它们的\cemph{指针},
+返回它们的\cemph{函数}, 在之后的课程中, 我们都会遇到这些.
+
+在温度格式转换程序中, 计算机是由\cemph{赋值语句}开始的
+\begin{myverbatim}
+    lower   = 0;
+    upper   = 300;
+    step    = 20;
+\end{myverbatim}
+这些语句是在给变量赋初值. 单独的语句是以封号结束的.
+
+表格中的每一行都是用同样的方法计算得到的, 所以我们使用一个循环, 每次输出
+一行; 这是 \verb"while" 循环的目标
+\begin{myverbatim}
+    while (fahr <= upper) {
+        ...
+    }
+\end{myverbatim}
+\verb"while" 的工作过程是: 圆括号中的条件被测试. 如果测试结果为真( \verb"fahr"
+的值小于等于 \verb"upper"), 循环体(花括号中的三行语句)就会被执行. 然后条件
+重新被测试, 如果还是真的, 那么循环体再次被执行. 当测试结果为假时( \verb"fahr"
+的值大于 \verb"upper"), 循环就会结束, 接着执行循环体后面的语句. 因为在循环
+体之后没有更多的语句, 于是程序结束.
+
+\verb"while" 循环体的语句可以有一条, 或者是被花括号包围的多条语句(例如温度
+转换程序), 只有一条语句时可以没有花括号, 如下所示
+\begin{myverbatim}
+    while (i < j)
+        i = 2 * i;
+\end{myverbatim}
+如果可以的话, 我们总是将 \verb"while" 控制下的语句缩进一个制表符的宽度(在
+这里显示的是四个空格宽), 这样一眼看过去就可以知道哪些语句是在循环中. 缩进
+加强了程序的逻辑结构. 虽然 C 编译器关心代码的样子, 但良好的缩进与空格有益
+于人们读懂程序. 我们推荐每行只写一条语句, 在操作符的两边的使用空格来使分组
+变得清楚. 空格的位置并不是很重要, 虽然人们对此怀有强烈的信仰. 我们已经从几
+种比较流行的编程风格中选择了一种, 选一个适合你的, 然后经常用它.
+
+大部分工作在循环体内就可以做完. 通过下面这条语句, 摄氏温度被计算并赋值给变
+量
+\begin{myverbatim}
+    celsius = 5 * (fahr - 32) / 9;
+\end{myverbatim}
+之所以是先乘以5再除以9, 而不是直接乘以 \verb"5/9", 是因为在 C 语言中, 整数
+除法会被\cemph{截断}: 小数部分被丢弃. 因为 5 和 9 是整数, 所以 \verb"5/9"
+的值是零, 于是所有计算得到的摄氏度都是零.
+
+这个例子也展现了 \printf 是如何工作的更多的一些信息. \printf 是一个通用的
+格式化输出函数, 在第七章我们会详细讨论. 它的第一个参数是一个字符串, 这个 
+字符串将会被打印, 每一个 \verb"%"指明了它的每一次出现都会被后面的参数替换掉,
+而且还指明了打印的格式. 例如 \verb"%d" 指定了一个整型数, 语句
+\begin{myverbatim}
+    printf("%d\t%d\n", fahr, Celsius);
+\end{myverbatim}
+导致两个变量 \verb"fahr" 和 \verb"celsius" 被打印输出, 在它们之间还插入的一
+制表符(\verb"\t").
+
+在 \printf 中第一个参数中的每一个 \verb"%" 都对应于第二个参数, 第三个参数, 
+等等; 它们必须在数值与类型上匹配得当, 否则你将会得到错误的答案.
+
+另外, \printf 并不是 C 语言的一部分; 在 C 语言中并没有定义输出与输入. \printf
+不过是一个标准库函数中的一个有用的函数. \printf 的行为在 AMSI 标准中定义, 然
+而, 正因为它在标准库中定义, 因此在任何一个编译器中, 它的行为总是符合标准的.
+
+为了把注意力集中到 C 语言自身, 在第七章之前我们并不会过多地谈及输入与输出. 
+特别是, 我们会推迟关于格式化的输入. 如果你想知道如何输入数字, 阅读7.4节中关
+于 \scanf 的内容. \scanf 类似于 \printf, 除了它是读入数据而不是输出数据.
+
+在温度转换程序中有两个问题. 比较简单的一个是问题是输出并不是很好看, 因为数字
+并不是向右对齐的. 这很容易解决; 如果我们在 \printf 语句的每个 \verb"%d" 添加
+一个宽度, 那么打印的数字将会是向右对齐的. 例如 
+\begin{myverbatim}
+    printf("%2d, %6d\n", fahr, celsius_;
+\end{myverbatim}
+将会打印第一个数字, 这个数字所占的宽度为3个字符, 第二个数字将会占6个字符, 
+就像下面这个样子:
+\begin{myverbatim}
+    0       -17 
+   20        -6 
+   40         4 
+   60        15 
+   80        26 
+  100        37 
+  ...
+\end{myverbatim}
+更重要的问题是, 因为我们使用了整型的数字表达式, 摄氏温度并不是非常精确, 
+$0^\circ F$大概是 $-17.8^\circ C$, 而不是 $-17$. 为了得到更加精确的答案,
+我们必须使用浮点型的算术表达式而不是整型. 为此我们必须对程序加以修改. 这是 
+修改后的第二个版本:
+\begin{myverbatim}
+    #include <stdio.h.
+    /* print Fahrenheit-Celsius table 
+       for fahr = 0, 20, ..., 300; floating-point version */
+    main()
+    {
+        float   fahr, celsius;
+        float   lower, upper, step;
+
+        lower   = 0;    /* lower limit of temperature scale */
+        upper   = 300;  /* upper limiet */
+        step    = 20;   /* step size */
+
+        fahr = lower;
+        while (fahr <= upper) {
+            Celsius = (5.0 / 9.0) * (fahr - 32.0);
+            printf("%3.0f %6.1f\n", fahr, celsius);
+            fahr = fahr + step;
+        }
+    }
+\end{myverbatim}
+这个版本与之前的相比非常的类似, 除了 \verb"fahr" 和 \verb"celsius" 被声明为
+浮点型, 转换公式的写法更加地自然. 我们在之前的版本中无法使用 \verb"5/9", 因
+为整型之间的除法会造成截断. 常量中的一个小数点表明这是一个浮点数, 因此, 
+\verb"5.0/9.0" 不会被截断因为这是两个浮点数之间的比率.
+
+如果一个操作符的操作数是整型的, 那么所执行的操作将会是整型的. 如果一个算术
+操作符包含了一个浮点操作数和一个整型操作数, 那么那个整型操作数将被转化为
+浮点数. 如果我们写了 \verb"(fahr-32)" 这样的语句, 那么 \verb"32" 将会自动
+转化为浮点数. 无论如何, 即使一个浮点数带整型常量的值, 那么它也是浮点型的.
+
+在第\ref{chap_toe} 章中我们会阐述将整型数转化为浮点数的细节. 就目前来说, 只要注意这样
+的赋值语句
+\begin{myverbatim}
+    fahr = lower;
+\end{myverbatim}
+和条件测试
+\begin{myverbatim}
+    while (fahr <= upper)
+\end{myverbatim}
+都会按照最自然的方法工作----在操作完成之前, 将 \verb"int" 转化成 
+\verb"float", \printf 的约束 \verb"%3.0f" 指示一个浮点数(这里是
+\verb"fahr"), 在打印时至少要占3个字符的宽度, 不要打印小数点与小数部分. 
+\verb"%6.1f" 描述另外一个数(\verb"celsius")在打印时至少要占6个字符的宽度,
+并且要带有一位小数. 输出如下
+\begin{myverbatim}
+     0  -17.8
+    20   -6.7
+    40    4.4
+   ...
+\end{myverbatim}
+宽度和精度可以不用指明: \verb"%6f" 说明一个数至少要占到6个字符的宽度; \verb"%.2f"
+规定要带有两位小数, 但是数的宽度并没有约束; \verb"%f" 仅仅规定以浮点数的格式
+打印数字.
+\begin{center}
+\begin{tabular}{|l|l|}
+    \hline
+    \verb"%d"       & 以十进制数格式打印                        \\ \hline
+    \verb"%6d"      & 以十进制数格式打印, 至少占6个字会宽度     \\ \hline
+    \verb"%f"       & 以浮点数格式打印                          \\ \hline
+    \verb"%6f"      & 以浮点数格式打印, 至少占6个字符的宽度     \\ \hline
+    \verb".2f"      & 以浮点数格式打印, 带2位小数               \\ \hline
+    \verb"6.2f"     & 以浮点数格式打印, 至少占6个字符的宽度, 
+                      并且带2位小数                             \\ \hline
+\end{tabular}
+\end{center}
+除此之外, \printf 以 \verb"%o" 指示八进制数, \verb"%x" 指示十六进制数,
+\verb"%c" 指示字符, \verb"%s" 指示字符串, \verb"%%" 表示一个百分号.
+
+\exercise 修改温度转换程序来打印表头.
+
+\exercise 写一个程序, 将摄氏温度转换成华氏温度.
+
+\section{for 语句}
+为了编程完成一项任务有多种方法. 现在来看一下温度转换程序的变种.
+\begin{myverbatim}
+    #include <stdio.h>
+    /* print Fahrenheit-Celsius table */
+    main()
+    {
+        int fahr;
+        
+        for (fahr = 0; fahr <= 300; fahr = fahr + 20)
+            printf("%3d %6.1f\n", fahr, (5.0 / 9.0) * (fahr - 32));
+    }
+\end{myverbatim}
+这个程序的运行结果与前一个相比一模一样, 但是它看起来有点不同. 最主要的变化
+是消除了许多变量; 只保留了 \fahr, 它的类型为 \cint. 上界, 下界与步进值只
+是作为常量出现在 \cfor 语句中, 给了它一个新的构造, 计算摄氏温度的表达式本来
+是作为一个单独的表达式出现, 但是现在是作为 \printf 的第三个参数.
+
+最后提到的变化是一个通用规则的实例----在一个可以出现某种类型的值的地方, 
+都可以放一个该类型的更复杂的表达式. 因为\printf 的第三个参数 \verb"%6.1f"
+必须匹配一个浮点数, 所有一个值为浮点数的表达式可以放在这里.
+
+\cfor 语句是个循环, 比 \cwhile 更加一般化. 如果你将它与之前的 \cwhile 比较, 
+那么它的操作就清楚得多了. 在圆括号内分成三个部分, 用封号分开. 第一部分是初
+始化
+\begin{myverbatim}
+    fahr = 0
+\end{myverbatim}
+只执行一次, 在进行循环之前. 第二部分是控制循环的条件测试:
+\begin{myverbatim}
+    fahr <= 300 
+\end{myverbatim}
+这个条件被计算; 如果值为真, 则执行循环体(在这里是一条 \printf 语句). 步进
+\begin{myverbatim}
+    fahr = fahr + 20 
+\end{myverbatim}
+被执行, 然后条件被重新评估. 当条件为假时, 循环结束. 跟 \cwhile 一样, 循环 
+体可以是单条语句, 也可以是花括号包围的一组语句. 初始化, 条件和步进可以是任何
+表达式.
+
+选择 \cwhile 还是 \cfor 随你的便, 取决于使用哪个更方便. 如果初始化与步进语句
+是单条语句, 且在逻辑上联系, 则 \cfor 会更加合适, 因为它会比 \cwhile 更加的
+紧凑.
+
+\exercise 修改温度转换程序来逆向打印表格, 即从 300 度到 0 度.
+
+\section{符号常量}
+在离开温度转换程序之前, 还有最后一步观察. 在程序中写诸如300和20这样的 
+\begin{myquotation}魔数\end{myquotation}
+是很不好的习惯; 这些数给呆会儿要阅读源代码的人只会传递非常少的信息, 而且他
+很系统地改变源代码. 一个解决魔数的方法是给他们一个有意义的名字. 一个 
+\cdefine 命令可以把一个\cemph{符号名字}或\cemph{符号常量}定义为一串特定的
+字符串: \\ \cdefine \ \textit{name replacement list} \\ 然后, \textit{name}
+的每一次出现(\textit{name}不能在被双引号包围, 也不能是另外一个名字的一部分)
+都会被替换为 \textit{replacement list}. \textit{name}拥有和变量一样的形式:
+数字与字母的序列, 并且以字母开头. \textit{replacement text}可以是任意的字
+符串, 并不局限于数字.
+\begin{myverbatim}
+    #include <stdio.h>
+
+    #define LOWER 0     /* lower limit of table */
+    #define UPPER 300   /* upper limit */
+    #define STEP  20    /* step size */
+
+    /* print Fahrenheit-Celsius table */
+    main()
+    {
+        int fahr;
+
+        for (fahr = LOWER; fahr <= UPPER; fahr = fahr + STEP)
+            printf("%3d %6.1f\n", fahr, (5.0 / 9.0) * (fahr - 32));
+    }
+\end{myverbatim}
+\verb"LOWER", \verb"UPPER" 和 \verb"STEP" 的值是符号常量, 不是变量, 所有它
+们不能出现在声明中. 符号常量通常使用大写字母, 以区别于小写字母的变量. 注意,
+在 \cdefine 的行尾并没有封号.
+
+\section{字符输入与输出}
+现在我们要开始考虑一系列的有关如何处理字符数据的程序. 你将会发现许多程序只
+不过是我们将要讨论的程序的扩展版本.
+
+标准库函数支持的输入输出模型非常简单. 文件输入或输出, 不管它们是从哪来, 要
+到哪去, 都会被当作字符流处理. 一个\cemph{字符流}是一个字节序列, 它们可以被
+划分成一行一行; 每一行包含零个或多个字符, 后面再跟上一个换行符. 标准库函数 
+有责任为每一个输入或输出流确认它们的模型; C 程序员无需关心在程序之外行是
+如何表示的.
+
+标准库函数提供了几个函数用于一次读写一个字符, 其中 \cgetchar 与 \cputchar 
+是最简单的两个. \cgetchar 从文本流读入\cemph{下一个输入字符}并返回它的值.
+也就是说, 当执行完 \\ \verb"c = getchar();" \\ 之后, 变量\texttt{c}就会 
+包含下一个输入字符. 输入字符通常来自键盘; 从文件输入将会在第七章讨论.
+
+每次调用 \cputchar 都会打印一个字符: \\ \verb"putchar(c);" \\ 将变量 
+\verb"c" 的值以字符的格式打印出来, 通常打印在屏幕上. 对 \cputchar 与 \printf
+的调用可能是交错进行的, 输出将会按照调用的顺序出现.
+
+\subsection{文件复制}
+只要有了 \cgetchar 和 \cputchar, 你就可以在无需知道更多关于输入与输出的情况
+下写出一个惊人的程序. 最简单的程序是从输入每次复制一个字符到输出: \par 
+\begin{mypsudo}
+    \textit{read a character} \par
+    \texttt{while (}\textit{character is not end-of-file indicator}\texttt{)}
+    \par
+    \hspace{2em}\textit{output the character just read} \par
+    \hspace{2em}\textit{read a character} \par
+\end{mypsudo}
+翻译成 C 语言就是
+\begin{myverbatim}
+    #include <stdio.h>
+
+    /* copy input to output; 1st version */
+    main()
+    {
+        int c;
+
+        c = getchar();
+        while (c != EOF) {
+            putchar(c);
+            c = getchar();
+        }
+    }
+\end{myverbatim}
+关系操作符 \verb"!=" 的意思是\begin{myquotation}不相等\end{myquotation}.
+
+在键盘或屏幕上什么将成为字符是想当然的, 但是就像其他所有的东西一样, 在计算机
+内部仅仅是二进制位而已. \verb"char"是专门用来存储这个字符数据的, 但也可以
+用整型. 我们会因为某些非常微妙但很重要的原因而使用 \verb"int".
+
+程序的关键是从有效的输入数据中识别出输入的结束. 解决办法是当 \cgetchar
+读不到更多输入时, 就会返回一个与众不同的值, 这个值不能与其他真正的字符混淆.
+这个值就是\verb"EOF", 意为"End Of File"(文件结束). 我们必须把\verb"c" 声明
+成足够存放任何 \cgetchar 返回的值的类型. 我们不用 \cchar 是因为变量 \verb"c"
+必须足够来存放 \verb"EOF", 而不仅仅是\cchar, 所有我们使用了 \cint.
+
+\verb"EOF" 是一个在<stdio.h>中声明的整数, 具体是什么值并不重要, 只要跟任
+何一个字符都不相等即可. 使用符号常量, 使得我们可以保证程序不依赖于特定的数值.
+
+有经验的 C 程序员会把复制程序写得更加的简练. 在 C 语言中, 任何一个赋值语句,
+例如 
+\begin{myverbatim}
+    c = getchar();
+\end{myverbatim}
+都是一个表达式, 并且代表着一个值, 赋值结束后, 这个值就是左边变量的值. 这就
+意味着赋值语句可以出现在一个更大的表达式中. 如果把对变量\verb"c"的赋值放在
+\cwhile 循环的条件判断中, 复制程序就可以写成
+\begin{myverbatim}
+    #include <stdio.h>
+    /* copy input to output; 2nd version */
+    main()
+    {
+        int c;
+
+        while ((c = getchar()) != EOF)
+            putchar(c);
+    }
+\end{myverbatim}
+\cwhile 先是得到一个字符, 并将其赋值给 \verb"c", 然后测试这个字符是不是文件
+结束标志. 如果不是文件结束, \cwhile 便会进入循环体, 如何循环. 当输入的是文
+件结束标志时, \cwhile 终止, 于是 \cmain 也就结束了.
+
+这个版本的复制程序专注于输入----现在只有对\cgetchar 的一次引用----程序也被
+缩短了. 现在得到的程序更加的紧凑, 一旦掌握了方言, 程序就很容易读懂. 在后
+面你会经常看到这样的风格. (把代码写得非常难懂是有可能的, 但是我们会有所倾
+向.
+
+在条件判断中, 赋值表达式两边的圆括号是必须的. \verb"!=" 的\cemph{优先级} 高
+于\verb"=", 这就意味着如果没有了圆括号, 那么条件测试会先于赋值. 所以语句
+\begin{myverbatim}
+    c = getchar() != EOF
+\end{myverbatim}
+等价于
+\begin{myverbatim}
+    c = (getchar() != EOF)
+\end{myverbatim}
+这样就会产生我们没有预料到的效果: 取决于\cgetchar 是否读到了文件结束标志, 
+\verb"c" 的值要么是0, 要么是1.(更多的内容请看第\ref{chap_toe} 章.)
+
+\exercise 验证表达式 \verb"getchar () != EOF" 的值是0或1.
+
+\exercise 写一个程序来打印\verb"EOF"的值.
+
+\subsection{字符计数}
+接下来这个程序将会对字符进行计数; 与复制程序有点类似.
+\begin{myverbatim}
+    #include <stdio.h>
+    
+    /* count characters in input; 1st version */
+    main()
+    {
+        long    nc;
+
+        nc = 0;
+        while (getchar() != EOF)
+            ++nc;
+        printf("%ld\n", nc);
+    }
+\end{myverbatim}
+语句 
+\begin{myverbatim}
+    ++nc;
+\end{myverbatim}
+向我们展现了一个新的操作符, \verb"++", 意味着\cemph{增一}. 你应该用 \verb"++nc"
+来代替 \verb"nc = nc + 1", 因为前者更加简练与更加高效. 有一个对应的减一的操作
+符 \verb"--". \verb"++"与 \verb"--"既可以作用前缀操作符(\verb"++nc"), 也可以
+是后缀操作符(\verb"--nc"); 在表达式中这两种形式具有不同的值, 将会在第
+\ref{chap_toe} 章演示,
+但是 \verb"++nc"与 \verb"nc++"都会使 \verb"nc"增一. 在这我们只讨论前缀形式.
+
+字符计数程序在一个 \clong 类型的变量中累积字符的个数, 而不是 \cint, \clong 
+至少有32位长. 虽然在某些机器上, \cint 与 \clong 的长度是一样的, 但是在有些机
+器上 \cint 的长度是16位, 16位长的整型数最大可表示32767, 因为使它溢出的数据
+相对来说较小. 格式说明符 \verb"%ld" 告诉 \printf 对应的参数的类型是 \clong.
+
+可以用一个 \cdouble(双精度浮点数) 类型的变量来支持更大的数. 我们还使用了
+\cfor 而不是 \cwhile, 以此来说明另一种写循环的方式.
+\begin{myverbatim}
+    #include <stdio.h>
+    /* count character in input; 2nd version */
+    main()
+    {
+        double nc;
+
+        for (nc = 0; getchar() != EOF; ++nc)
+            ;
+        printf("%.0f\n", nc);
+    }
+\end{myverbatim}
+\cfloat 与 \cdouble 在 \printf 中都是用 \verb"%f" 来说明; \verb"%.0f" 会阻
+止打印小数点与小数部分.
+
+\cfor 循环的循环体是空的, 因为所有的工作都在条件测试与递增部分中做好了, 但
+是 C 语言的语法规则要求 \cfor 语句必须要有一个循环体. 单独的封号, 叫做%
+\cemph{空语句}, 只是为了满足语法要求. 我们把它放在一个单独的行中来使它可见.
+
+在我们离开字符计数程序之前, 我们再看一下如果输入中没有字符, \cwhile 或 \cfor
+在第一次调用 \cgetchar 时就会失败, 于是程序就产生一个零值, 这是正确的答案.
+这很重要. \cwhile 与 \cfor 的优点之一就是在进入循环体之前会先测试条件. 如果 
+循环条件一开始就为假, 那就什么都不要做, 这甚至意味着根本就没有进入循环体内.
+当没有输入时, 程序应该表现的聪明点. \cwhile 和 \cfor 有助于保证在边界条件时
+程序表现合理.
+
+\subsection{行计数}
+下面这个程序对输入的行数进行计数. 正如我们之前谈到的, 标准库函数保证一个
+输入文本流以一个行序列的形式出现, 每一行都是以换行符终止. 因此, 对行计数
+就是对换行符计数:
+\begin{myverbatim}
+    #include <stdio.h>
+
+    /* count lines in input */
+    main()
+    {
+        int c, nl
+
+        nl = 0;
+        while ((c = getchar()) != EOF)
+            if (c == '\n')
+                ++nl;
+        printf("%d\n", nl);
+    }
+\end{myverbatim}
+\cwhile 的循环体内组成了一个 \cif, 它用来控制 \verb"++nl". \cif 语句对括号
+内的条件进行判断, 如果结果为真, 则执行随后的语句(或花括号内的语句块). 我
+们仍然用缩进来表达控制关系.
+
+\verb"==" 是 C 语言 \begin{myquotation}相等\end{myquotation}的记号(相当于
+Pascal 语言中的 \verb"=", 或 Fortran 中的 \verb".EQ."). 采取这样的记号是
+为了与 C 语言中的赋值运算符 \verb"=" 相区别. 请注意: C 语言新手偶尔会写成
+\verb"=", 虽然他们心里想的是 \verb"==". 我们将会在第\ref{chap_toe} 章看到,
+结果是一个合法的表达式, 我们不会得到警告.
+
+把一个字符写在一对单引号之间, 这表示的是一个整型值, 值的大小等于该字符在
+机器字符集中的数值. 这叫做一个\cemph{字符常量}, 虽然这只是另一个表示一个
+小整数的方法. 例如, \verb"'A'" 是一个字符常量; 在 ASCII 字符集中它的值是
+65, 这个整型值是 \verb"A" 的内部表示. 当然写成 \verb"'A'" 要比写在 \verb"65"
+要好一点: 这样写意义很明确, 而且独立于特定的字符集.
+
+在字符串常量中的转义序列同样也是合法的字符常量, 所以 \verb"\n" 代表着换行符
+的值, 在 ASCII 中它的值为10. 你必须注意, \verb"'\n'" 是一个字符, 与字符相对,
+我们将在第\ref{chap_toe} 章讨论字符串.
+
+\exercise 写一个计算空格, 制表符和换行符的程序.
+
+\exercise 写一个程序, 将输入中多于一个空格转换成一个空格, 并输出.
+
+\exercise 写一个程序, 将输入中的制表符用 \verb"\t" 替换, 将退格符用 
+\verb"\b" 替换, 将反斜杆用 \verb"\\" 替换, 于是, 输入中的制表符与退格符就
+会以一种无歧义的方式显现出来.
+
+\subsection{词计数}
+我们的第四个程序是对行, 字符和单词计数, 单词的比较松散的定义是一个不包
+含空格, 制表符或换符符的字符序列. 下面这个程序是 UNIX 程序 \verb"wc" 
+的主干程序.
+\begin{myverbatim}
+    #include <stdio.h>
+
+    #define IN  1   /* inside a word */
+    #define OUT 0   /* outside a word */
+
+    /* count lines, words, and characters in input */
+    main()
+    {
+        int c, nl, nw, nc, state;
+
+        state = OUT;
+        nl = nw = nc = 0;
+        while ((c = getchar()) != EOF) {
+            ++nc;
+            if (c == '\n')
+                ++nl;
+            if (c == ' ' || c == '\n' || c == '\t')
+                state = OUT;
+            else if (state == OUT) {
+                state = IN;
+                ++nw;
+            }
+        }
+        printf("%d %d %d\n", nl, nw, nc);
+    }
+\end{myverbatim}
+每次程序碰到单词的第一个字符时, 就会计数一次. 变量 \verb"state" 记录着当前
+程序是否在一个单词内; 初始状态是%
+\begin{myquotation}不在单词内\end{myquotation}, 于是被赋值为 \verb"OUT".
+相对于字面常量 0 和 1, 我们更喜欢用符号常量 \verb"IN" 和 \verb"OUT", 因为这
+样会使程序的可读性更好. 在一个小程序中, 这样做直到的作用很小, 但是在一个大
+程序中, 从一开始就值得为代码清晰而付出一番努力. 你会发现要想扩展程序只要在
+符号常量那么修改一下魔数就够了.
+
+这一行:
+\begin{myverbatim}
+    nl = nw = nc = 0;
+\end{myverbatim}
+把所有三个变量都赋为零. 这并不是一个很特别的情况, 但是可以从这推论赋值表达
+式是一个带有值的表达式, 运算顺序是从右到左. 如果我们写成:
+\begin{myverbatim}
+    nl = (nw = (nc = 0));
+\end{myverbatim}
+效果是一样的. 操作符 \verb"||" 的意思是 OR, 所以这一行:
+\begin{myverbatim}
+    if (c == ' ' || c == '\n' || c == '\t')
+\end{myverbatim}
+是说\begin{myquotation}如果 \verb"c" 是空格符\cemph{或}换行符, \cemph{或}%
+制表符\end{myquotation}. (回想一下, \verb"\t" 是制表符的可视化表示.) 有一 
+个对应的 AND 操作符 \verb"&&"; 它的优先级要比 \verb"||" 高. 用 \verb"&&" 
+或 \verb"||" 连接的表达式从左至右运算, 而且只要能够判断出整个表达的真值,
+那么判断过程就会马上停止. 如果 \verb"c" 是空格符, 那么就没有必要再去判断
+它是不是换行符或制表符, 所有后面的这些判断都不会执行. 虽然在这里不太重要,
+但是在更加复杂的情况下就非常重要, 我们以后就会看到.
+
+这个例子还演示了 \celse 的使用, 如果 \cif 语句的条件判断为假, 就会去执行
+\celse 中的语句. 通常的形式是 \par
+\begin{mypsudo}
+\texttt{if (}\textit{expression}\texttt{)}  \par
+\hspace{2em}\textit{statement}$_1$          \par
+\texttt{else}                               \par
+\hspace{2em}\textit{statement}$_2$          \par
+\end{mypsudo}
+\verb"if-else" 有且仅有一个会被执行. 如果 \textit{expression} 判断结果为
+真, \textit{statement}$_1$ 就会执行; 否则, \textit{statement}$_2$ 执行.
+每一个 \textit{statement} 都可以是一条语句或用花括号包围起来的几条语句.
+在单词计数程序中, \celse 后面的那个 \cif 控制着花括号内的两条语句.
+
+\exercise 你如何测试单词计数程序? 如果程序有 bug 的话, 你应该准备什么样的
+输入来使它显露出来?
+
+\exercise 写一个程序, 从输入中每行打印一个单词.
+
+\subsection{数组}
+让我们写一个程序来统计文本中数字, 空白符(包括空格, 制表符与换行符)以及其他
+字符的出现次数. 虽然这是人为构造了, 但是这可以让我们在一个程序中同时阐述
+C 语言的某些特征.
+
+输入文本中含有十二种字符, 因为使用数组来存储每个数字的出现次数是很方便的, 而
+不是用十个单独的变量, 这是程序的其中一个版本:
+\begin{myverbatim}
+    #include <stdio.h>
+
+    /* coutn digits, white space, others */
+    main()
+    {
+        int c, i, nwhite, nother;
+        int ndigit[10];
+
+        nwhite = nother = 0;
+        for (i = 0; i < 10; ++i)
+            ndigit[i] = 0;
+
+        while ((c = getchar()) != EOF)
+            if (c >= '0' && c <= '9')
+                ++ndigit[c - '0'];
+            else if (c == ' ' || c == '\n' || c == '\t')
+                ++nwhite;
+            else 
+                ++nother;
+
+        printf("digits =");
+        for (i = 0; i < 10; ++i)
+            printf(" %d", ndigit[i]);
+        printf(", white space = %d, other = %d\n",
+            nwhite, nother);
+    }
+\end{myverbatim}
+把源代码作为输入, 则程序的输出为
+\begin{myverbatim}
+    digits = 9 3 0 0 0 0 0 0 0 1, white space = 123, other = 345
+\end{myverbatim}
+声明:
+\begin{myverbatim}
+    int ndigit[10];
+\end{myverbatim}
+宣布 \verb"ndigit" 是一个包含10个整数的数组. 在 C 语言中, 数组的下标总是从
+0开始, 所有数组中的元素是 \verb"ndigit[0], ndigit[1], ..., ndigit[9]".
+这在初始化与打印数组的 \cfor 循环中已经反映了出来.
+
+下标可以是任何值为整数的表达式, 包括整型变量, 如 \verb"i", 与整型常量.
+
+这个程序依赖于数字字符的属性. 例如, 测试
+\begin{myverbatim}
+    if (c >= '0' && c <= '9')
+\end{myverbatim}
+判断 \verb"c" 是否是一个数字字符, 该数字字符的数值是
+\begin{myverbatim}
+    c - '0'
+\end{myverbatim}
+这个表达式正常工作的前提是 \verb"'0', '1', ..., '9'" 的数值是连续递增的.
+幸运的是, 这个规则对所有字符集都是适用的.
+
+在定义上, \verb"char"s 仅仅是一个小整数, 所以在自术表达式中, \cchar 类型
+的变量与常量, 和 \verb"int"s 是一样的. 这个规则用起来非常方便而且自然;
+例如 \verb"c - 'c'" 的值是一个整数, 大小在0到9之间, 对应于存放在 \verb"c"
+中的 \verb"'0'" 到 \verb"'9'", 而且这个值也是数组 \verb"ndigit" 的有效下标.
+判断某个字符是否是一个数字, 空白符还是别的什么, 是在下面这几行中做的:
+\begin{myverbatim}
+    if (c >= '0' && c <= '9')
+        ++ndigit[c - '0'];
+    else if (c == ' ' || c == '\n' || c == '\t')
+        ++ndigit;
+    else 
+        ++nother;
+\end{myverbatim}
+模式    \par
+\begin{mypsudo}
+    \hspace{0em}\verb"if ("\textit{condition}$_1$ \verb")"      \par
+    \hspace{2em}\textit{statement}$_1$                          \par 
+    \hspace{0em}\verb"else if ("\textit{condition}$_2$ \verb")" \par 
+    \hspace{2em}\textit{statement}$_2$                          \par 
+    \hspace{2em}\verb"..."                                      \par
+    \hspace{2em}\verb"..."                                      \par
+    \hspace{0em}\verb"else"                                     \par 
+    \hspace{2em}\textit{statement}$_n$                          \par
+\end{mypsudo}
+在程序中会经常出现, 这是一种做多路选择的方式. \textit{condition} 按照从上
+到下的顺序求值, 直到某些 \textit{condition} 满足; 这个时候, 对应的 
+\textit{statement} 开始执行, 于是整个构造就结束了. (任何一个 \textit{statment}
+都可以是用花括号括起来的几条语句.) 如果没有一个条件满足, 如果最后有一个
+\celse, 那么它后面的语句就会执行. 如果最后没有 \celse 和它的 \textit{statement},
+在这个单词计数程序中, 什么动作也不会执行. 在第一个 \cif 和最后一个 \celse 
+之间可以有任意数量的 \par
+\begin{mypsudo}
+    \texttt{else if (} \textit{condition} \texttt{)} \par
+    \hspace{2em} \textit{statement} \par
+\end{mypsudo}
+这种组合.
+
+作为一种既成风格, 建议以我们展现的方式组织这种结构; 如果每一个 \cif 都要在
+前一个 \celse 的基础上再往右缩进的话, 一个较长的判断就会超出页面的边缘.
+
+将在第 4 章讨论的 \cswitch 语句提供了另一种表达多分支的方法, 尤其是条件的
+值是在某个整数或字符集合中. 作为对照, 我们将在 3.4 节展现一个这个程序的
+\cswitch 版本.
+
+\exercise 写一个程序打印一个柱状图, 这个柱状图表达的是输入中各个单词的长度.
+柱状图的水平方向很容易画, 但是在垂直方向稍有挑战性.
+
+\exercise 写一个程序打印一个柱状图, 这个柱状图表达的是输入各个字符的数目.
+
+\subsection{函数}
+在 C 语言中, 一个函数与 Fortran 中的子程序或函数是等价的, 与 Pascal 中的 
+过程或函数同要如此. 函数提供了一个方便的方法, 来封闭一些计算, 然后就可以
+使用它而不用考虑它的具体实现. 如果函数设计得合理, 那么就可以忽略工作是如何
+做的; 只要知道它能做什么就足够了. C 语言把函数的诉求做得非常简单, 方便和
+高效; 你将会经常看到有些短函数只被定义且只使用一次, 这仅仅是为了让代码更加
+清晰.
+
+到目前为止, 我们只用了库函数已提供的函数, 例如 \printf, \cgetchar 和 \cputchar,
+现在是时候由我们自己来写一些函数了. 因为 C 语言中没有像 Fortran 那样的指数
+操作符 \texttt{**}, 所有就让我们通过编写函数 \texttt{power(m, n)} 来阐述函数
+定义的结构. \texttt{power(m, n)} 的作用是计算 $m^n$ 的值, 也就是说
+\texttt{power(2, 5)} 的值是 32. 这个函数并不是一个实用的指数函数, 因为它只
+处理了小整数的正整数次幂, 但是这个例子足够用来阐述 C 语言的函数结构. (标准 
+库函数包含一个计算 $x^y$ 的函数 \texttt{pow(x, y)}.)
+
+这是函数 \texttt{power} 和用来测试它的主程序, 因此你可以一次看到全部的结构:
+\begin{myverbatim}
+    #include <stdio.h>
+
+    int power(int m, int n);
+
+    /* test power function */
+    main()
+    {
+        int i;
+
+        for (i = 0; i < 10; ++i)
+            printf("%d %d %d\n", i, power(2, i), power(-3, i));
+        return 0;
+    }
+
+    /* power: raise base to n-th power; n >= 0 */
+    int power(int base, int n)
+    {
+        int i, p;
+
+        p = 1;
+        for (i = 1; i <= n; ++i)
+            p = p * base;
+        return p;
+    }
+\end{myverbatim}
+一个函数定义的形式是:
+\begin{myverbatim}
+    return-type function-name(parameter declarations, if any)
+    {
+        declarations
+        statements
+    }
+\end{myverbatim}
+函数定义可以以任意的顺序出现, 也可以在一个或几个文件中, 但是同一个函数不能
+被分割在几个文件中, 必须在一个文件内定义完毕. 如果一个程序的代码分散在几个
+文件中, 与一个文件相比, 你可以说前者需要更多的编译与载入, 但这是操作系统操
+心的事, 并不是语言的属性. 在这里, 我们假设两个函数都在同一个文件内, 所以 
+前面你所学的 C 语言知识仍然有用
+
+函数 \texttt{power} 在 \cmain 函数里被调用了两次, 都在一行完成的:
+\begin{myverbatim}
+    printf("%d %d %d\n", i, power(2, i), power(-1, i));
+\end{myverbatim}
+每次调用 \texttt{power} 都要传递给它两个参数, 每次调用都会返回一个整数, 这
+个整数被格式化地打印输出. 表达式 \texttt{power(2, i)} 的值是一个整数, 就像 
+\texttt{2} 和 \texttt{i} 一样. (并不是所有的函数都返回整数; 我们会在第 4 
+章讨论地更深一点.)
+
+第一次就是 \texttt{power} 它自己:
+\begin{myverbatim}
+    int power(int base, int n);
+\end{myverbatim}
+这一行声明了函数的名字, 返回值类型和参数类型. \texttt{power} 参数是 \texttt{power}
+的局部变量, 在其他函数中是不可见的: 这意味着在其他函数中可以使用名字一样的
+变量而不会发生冲突. 这对变量 \texttt{i} 和 \texttt{p} 也是成立的:
+\texttt{power} 里面的 \texttt{i} 与 \cmain 里的 \texttt{i} 没有关系.
+
+我们通常会为函数参数列表里的每一个变量名字使用一个\cemph{参数}. 术语
+\cemph{形式参数} 与 \cemph{实际参数} 有时候会不加区分.
+
+在 \cmain 中返回 \texttt{power} 的值是通过 \creturn 语句完成的. 在 \creturn
+后面可以跟上任何的表达式:
+\begin{mypsudo} \texttt{return } \textit{expression} \end{mypsudo}
+
+函数可以不需要返回值; 一个返回语句而后面没有跟上表达式, 会使得控制流返回到
+主调函数, 但不会带回值, 在执行到函数的终止右花括号也会导致返回. 主调函数 
+也可以忽略函数的返回值.
+
+你可以已经注意到在 \cmain 的末尾有一个 \creturn 语句. 因为 \cmain 与其他
+函数相比没什么两样, 它也会给主调函数返回一个值, 而这个值返回给执行该程序
+的环境. 典型来说, 返回一个 0 值意味着正常终止; 非 0 值意味着不寻常或错误的
+终止条件. 为简便叙述, 到这里为止我们都忽略了 \cmain 的 \creturn 语句.
+从现在开始我们将会在 \cmain 中包含 \creturn 语句, 作为返回给执行环境的 
+提示信息. 
+
+声明:
+\begin{myverbatim} 
+    int power(int base, int n);
+\end{myverbatim}
+放在 \cmain 的前面是为了说明 \texttt{power} 是一个参数, 它需要两个 \cint
+参数并且它的返回值也是 \cint. 这个声明, 专业点说是 \cemph{函数原型}, 必须与
+\texttt{power} 的声明与调用一致. 如果函数的定义或调用与它的函数原型不一致,
+都将导致一个错误.
+
+参数的名字可以不用相同. 实际上, 函数原型中的参数名字是可有可无的,
+所以函数原型我们也可以写成这个样子:
+\begin{myverbatim}
+    int power(int, int);
+\end{myverbatim}
+然面认真选择的名字对一个好文档来说是非常必要的, 所有我们在函数原型中都会写
+出参数的名字.
+
+版本变化注意事项: 从 C 语言的早先版本到 ANSI C 的最大变量就是函数的定义与
+声明. 在 C 语言的原始定义中, \texttt{power} 会被写在这个样子:
+\begin{myverbatim}
+    /* power: raise base to n-th power; n >= 0 */
+    /* (old-style version) */
+    power(base, n)
+    int base, n;
+    {
+        int i, p;
+        
+        p = 1;
+        for (i = 1; i <= n; ++i)
+            p = p * base;
+        return p;
+    }
+\end{myverbatim}
+参数在贺括号之中命名, 它们的类型在开花括号之前声明, 未被声明的参数会被当成
+\cint. (函数体与之前的一样.)
+
+在程序开头的 \texttt{power} 的声明就像这个样子:
+\begin{myverbatim}
+    int power();
+\end{myverbatim}
+没有出现参数列表, 因为编译器无法检查 \texttt{power} 是否被正确的调用. 确实,
+因为默认 \texttt{power} 会返回整型值, 因此整个声明也可能被忽略.
+
+新的函数声明语法可以让编译器更加容易地侦测到参数个数或类型的错误.
+老的声明风格与定义在 ANSI C 中仍然可以工作, 至少在过渡时期内是这样的,
+但是我们强烈建议你使用新的语法, 如果你的编译器支持的话.
+
+\exercise 重写 1.2 节中的温度转换程序, 使用一个函数来完成转换工作.
+
+\subsection{参数 ---- 按值传递}
+对使用其他语言, 尤其是 Fortran 的程序员来说, C 语言函数中有一个特征是比较 
+新鲜的. 在 C 语言中, 所有函数的参数都是按值传递. 这意味着在被调函数中,
+参数的值会存放在一个临时变量中, 而不是它们原先所在的变量. 这跟按引用传递的
+语言(例如 Fortran, Pascal)相比, 有很大的不同. 在那些语言中,
+被调用的子例程可以访问原来的参数, 而不是它们的副本.
+
+按值传递是一个很有用的特性, 但不是责任. 这个特性经常可以使带有少量外来变量
+的程序更加的紧凑, 因为参数在被调函数中可以被当作已被初始化的局部变量来使用.
+例如, 这是使用了这个特性的 \texttt{power} 版本:
+\begin{myverbatim}
+    /* power: raise base to n-th power; n >= 0; version 2 */
+    int power(int base, int n)
+    {
+        int p;
+
+        for (p = 1; n > 0; --n)
+            p = p * base;
+        return p;
+    }
+\end{myverbatim}
+n 被当作一个局部变量来使用, 它的值向下递减(\cfor 向下循环), 直到变为零;
+变量 \texttt{i} 变得不再需要. 在 \texttt{power} 无论对 \texttt{n} 做什么操作,
+都不会影响到 \texttt{power} 被调用时, 传递给它的参数.
+
+如果有必要的话, 在被调函数中是可以修改主调函数中的变量的.
+主调函数必须提供要被改值的变量的\cemph{地址}(从技术上讲其实是指向变量
+的\cemph{指针}, 并且被调函数也要把参数声明为指针类型, 通过指针可以间接地
+访问变量, 我们将在第 5 章讨论指针.
+
+但是对于数组来说就不一样了. 如果数组的名字被当作一个参数的话,
+传递给函数的值将是数组首元素的地址 -- 并没有把整个数组的元素传递进去.
+通过下标访问元素, 函数可以访问并修改元素中的任意一个元素. 这是下一节将要
+讨论的话题.
+
+\subsection{字符数组}
+C 语言中最常用到的数组是字符数组. 为了阐述字符数组的使用, 以及操作它们的函数,
+让我们写一个程序, 这个程序从文本行中计入, 并打印其中最长的一行. 提纲足够
+简单: \par
+\begin{mypsudo}
+    \hspace{2em}\texttt{while (}\textit{there's another line}\texttt{)}\par
+    \hspace{4em}\texttt{if (}\textit{it's longer that the previous longest}
+        \texttt{)} \par
+    \hspace{2em}\textit{print longest line} \par
+\end{mypsudo}
+使用提纲就可以很自然地把程序分割成块. 一个模块获取一个新行, 另一个存储它,
+最后一个控制处理过程.
+
+因为事情被分割地很好, 那么在写程序时按照这个思路来写就容易多了. 首先, 让我 
+们先写一个函数 \texttt{getline}, 这个函数会获取输入中的下一行. 我们努力
+使这个函数可以适应多种环境. 在最简单的环境下, \texttt{getline} 当有可能
+读到文件末尾时, 会返回一个信号来告知这件事. 0 是一个可接受的表示文件结束
+的值, 因为没有一个有效的行的长度是 0. 每行文本都至少有一个字符, 即使是一
+个只含有换行符的行, 它的长度也是 1.
+
+如果我们找到一个比之前最长的行还要长的, 我们必须把它存放在某个地方. 这引出了第二
+个函数, \texttt{copy}, 把一个文本行复制到一个安全的地方.
+
+最终, 我们需要一个主程序来控制 \texttt{getline} 和 \texttt{copy}. 这是最
+终的程序:
+\begin{myverbatim}
+    #include <stdio.h>
+    #define MAXLINE 1000    /* maximum input line length */
+
+    int getline(char line[], int maxline);
+    void copy(char to[], char from[]);
+
+    /* print the longest input line */
+    main()
+    {
+        int     len;                /* current line length */
+        int     max;                /* maximum length seen so far */
+        char    line[MAXLINE];      /* current input line */
+        char    longest[MAXLINE];   /*longest line saved hear */
+
+        max = 0;
+        while ((len = getline(line, MAXLINE)) > 0)
+            if (len > max) {
+                max = len;
+                copy(longest, line);
+            }
+        if (max > 0) /* there was a line */
+            printf("%s", longest);
+        return 0;
+    }
+
+    /* getline: read a line into s, return length */
+    int getline(char s[], int lim)
+    {
+        int c, i;
+
+        for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
+            s[i] = c;
+        if (c == '\n') {
+            s[i] = c;
+            ++i;
+        }
+        s[i] = '\0';
+        return i;
+    }
+
+    /* copy: copy 'from' into 'to' assume to is big enough */
+    void copy(char to[], char from[])
+    {
+        int i;
+
+        i = 0; 
+        while ((to[i] = from[i]) != '\0')
+            ++i;
+    }
+\end{myverbatim}
+函数 \texttt{getline} 与 \texttt{copy} 在程序的开头声明,
+我们假设这两个都在同一个文件中.
+
+\cmain 和 \texttt{getline} 通过一对参数交流, 并返回一个值. 在
+\texttt{getline} 中, 参数是用这样声明的:
+\begin{myverbatim} int getline{char s[], int lim); \end{myverbatim}
+这行代码指明了第一个参数 \texttt{s} 是一个数组, 第二个参数 \texttt{lim}
+是一个整数. 在声明数组的时候, 提供数组的大小是为了分配存储空间. 在
+\texttt{getline} 函数中, 数组 \texttt{s} 的长度并不是必须的, 因为它的大小在
+\cmain 中设置. \texttt{getline} 使用 \creturn 把返回值发送给调用者, 就像
+\texttt{power} 做的那样. 这行代码也声明了 \texttt{getline} 返回一个 \cint;
+因为 \cint 是默认的返回类型, 所以返回值类型可以省略.
+
+有些函数会返回一个有用的值; 而其他, 例如 \texttt{copy},
+仅仅是为了它们的使用效果而用它们, 因此并没有返回值. \texttt{copy}
+的返回类型是 \cvoid, 这是在显式地声明该函数不会返回任何值.
+
+\texttt{getline} 将字符 \verb"'\0'"(\cemph{空字符}, 值为零)
+放到它所创建的数组的末尾, 以此来标记字符串的结尾. 这个转换同样被 C
+语言使用: 当一个字符串常量, 如
+\begin{myverbatim} "hello\n" \end{myverbatim}
+出现在 C 程序中时, 它被当成一个字符数组存储起来, 在这个数组以 \verb"'\0'"
+终止.
+\begin{figure}[th]
+\begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \texttt{h}  & \texttt{e} & \texttt{l} & \texttt{l} & \texttt{o} &
+    \verb"\n" & \verb"\0"   \\
+    \hline
+\end{tabular}
+\end{figure}
+\printf 的格式说明符 \verb"%s" 希望对应的参数是一个字符串, 这个字符串同样以
+\verb"'\0'" 终止. \texttt{copy} 同样也依赖于输入参数以 \verb"'\0'" 终止,
+并将这个字符复制到输入中.
+
+即使是一个很小的程序, 说明它的设计技巧也是很有必要的. 例如, 当 \cmain
+遇到一个超过上界的行应该怎么办? \texttt{getline} 工作起来很安全,
+因为当数组满的时候它就停止了搜集, 即使没有看到换行符.
+通过测试长度和最后一个返回的字符, \cmain 可以判断某一行是不是过长,
+然后再按它所希望地那样来处理. 为简洁起见, 我们没有考虑这个问题.
+
+使用 \texttt{getline} 的用户无法提前知道输入的行会有多长, 所以
+\texttt{getline} 会检查溢出. 在另一方面, \texttt{copy}
+的用户已经知道(或有办法知道) 一个字符串会有多长,
+所以我们决定不要添加错误处理代码. 
+
+\exercise 修改最长行程序的主要例程, 使得它可以正确地打印任意输入字符串的长
+度, 尽量对文本也适用.
+
+\exercise 写一个程序, 打印出所有长度超过 80 个字符的行.
+
+\exercise 写一个程序, 从输入中移除行首与行尾的空白符, 同时也删除空白行.
+
+\exercise 写一个函数 \texttt{reverse(s)} 将字符串 \texttt{s} 的顺序逆转.
+使用它来写一个程序, 将输入的每一行逆转.
+
+\subsection{外部变量与作用域}
+\cmain 中的变量, 例如 \texttt{line}, \texttt{longest} 等等, 是局部的.
+因为它们是在 \cmain 中声明的, 没有其他函数可以直接访问到它们.
+对其他函数中的变量也是一样的; 例如, \texttt{getline} 中的变量 \texttt{i} 与
+\texttt{copy} 中的变量 \texttt{i} 是没有关系的. 函数内的局部变量只有在函数
+被调用的时候才会存在, 当函数调用结束时, 也就消失了. 所以这些变量才会被称为%
+\cemph{自动变量}, 这个词在其他语言中也是一个术语.
+我们仍然使用自动变量来引用那些局部变量.(第 4 章讨论 \cstatic 关键字修饰
+的变量, \cstatic 修饰的变量在函数调用之间保持不变.)
+
+因为自动变量是伴随着函数的调用与结束, 所以它们无法在调用之间保持值, 在每
+次使用它们的值之间必须初始化, 否则它们值就是垃圾值.
+
+作为自动量的一个选择, 可以定义一个对所有函数来说都是\cemph{外部}的变量,
+也就是说, 该变量可以被任何函数按名访问. (这个特点很像 Fortran 中的 COMMON,
+或者是 Pascal 中在最外部声明的变量.) 因为外部变量是全局可访问的, 所以它们 
+可以取代函数参数, 而在函数之间通信. 而且, 因为外部变量一直存在, 并不会随
+着函数的调用与结束而出现与消失, 它们可以保持值, 即使在函数为它们赋值之后
+即返回.
+
+一个外部变量必须被\cemph{定义}, 只能被定义一次, 在任何函数之外定义; 这会
+它分配一个内存空间. 如果函数想要访问这个变量的话, 必须事先加以\cemph{声明},
+这表明了变量的类型. 声明可能是显式的 \cextern, 也可以通过上下文隐式地声明.
+为了使讨论更加的具体, 让我们重写最长行程序, 把 \texttt{line},
+\texttt{longest}, \texttt{max} 定义为外部变量. 必须把三个函数的调用, 定义和
+函数体都修改一下.
+\begin{myverbatim}
+    #include <stdio.h>
+    #define MAXLINE 1000    /* maximum input line size */
+
+    int max;                /* maximum length seen so far */
+    char line[MAXLINE];     /* current input line */
+    char longest[MAXLINE];  /* longest line saved here */
+
+    int getline(void);
+    void copy(void);
+
+    /* print longest input line; specialized version */
+    main()
+    {
+        int len;
+        extern int max;
+        extern char longest[];
+
+        max = 0;
+        while ((len = getline()) > 0)
+            if (len > max) {
+                max = len;
+                copy();
+            }
+        if (max > 0) /* there was a line */
+            printf("%s", longest);
+        return 0;
+    }
+
+    /* getline: specialized version */
+    int getline(void)
+    {
+        int c, i;
+        extern char line[];
+
+        for (i = 0; i < MAXLINE - 1
+                && (c = getchar()) != EOF 
+                && c != '\n'; ++i)
+            line[i] = c;
+        if (c == '\n') {
+            line[i] = c;
+            ++i;
+        }
+        line[i] = '\0';
+        return i;
+    }
+
+    /* copy: specialize version */
+    void copy(void)
+    {
+        int i;
+        extern char line[], longest[];
+
+        i = 0;
+        while ((longest[i] = line[i]) != '\0')
+            ++i;
+    }
+\end{myverbatim}
+在上面的例子中, \cmain, \texttt{getline} 和 \texttt{copy} 函数中的外部变量
+在程序的开头定义, 定义使得外部变量具有了类型与存储空间. 从语法上来讲,
+外部变量的定义与局部变量的定义是一样的. 在一个函数可以用外部变量之前, 必须 
+使得该变量对函数来说是可知的; 声明与之前的一样, 除了关键字 \cextern.
+
+在确定的情况下, \cextern 关键字可以省略. 如果某个外部变量在被函数使用之前
+已经在源程序中定义了, 那么就没有必要再在函数中用 \cextern 去声明. 所以 
+\cmain, \texttt{getline} 和 \texttt{copy} 中的 \cextern 是多余的. 实际上,
+在本书所有的示例程序中, 外部变量的定义都放在源文件的开头, 所以, 本书中的
+所有函数都可以省略对外部变量的声明.
+
+如何函数分散在几个源文件中, 某个变量在\cemph{文件1}中定义,
+但在\cemph{文件2}和\cemph{文件3}中用到了,
+那么在\cemph{文件2}与\cemph{文件3}中需要用 \cextern 来声明该变量.
+通常来说, 把对函数与变量的外部声明放在一个单独的文件中, 这个文件传统上
+叫做\cemph{头文件}, 这就是在源文件开头用 \verb"#include" 包含的文件.
+后缀 \texttt{.h} 是头文件的传统后缀. 标准库函数中的函数, 例如, 在
+\texttt{stdio.h} 这样的头文件中的声明. 更详细的讨论在第 4 章, 库函数的
+讨论在第 7 章和附录 B.
+
+因为 \texttt{getline} 与 \texttt{copy} 没有输入参数, 因此建议在声明它们时,
+将它们声明成 \texttt{getline()} 与 \texttt{copy()}. 但是为了兼容以前的 C
+编译器, 标准会把空参数列表当作旧风格的声明, 于是把所有的参数列表检查都关闭
+了; 关键字 \cvoid 在显示声明空列表时就很必要了. 我们将会在第 4 章详细讨论.
+
+你必须注意到在本节当我们谈到外部变量时, 我们总是非常小心地用\cemph{声明}与%
+\cemph{定义}, "定义" 用于指明变量放在哪里, 或者给变量分配一块内存空间.
+"声明" 只是指明变量的本质, 但是没有分配内存空间.
+
+顺便说一下, 把变量都声明成 \cextern 似乎是一种简化函数交流的趋势. 当你想
+要参数列表与变量时, 它们就在那儿, 随时可用. 可是即使你不想要全局变量时, 
+它们也在那儿. 太过依赖于全局变量是一种很危险的行为, 因为对程序来说, 数据
+联系是什么样的并不是非常明显, 变量可以在不希望, 甚至不经意间被改变, 后果
+是程序难以修改. 最长行程序第二版并不如第一版, 部分原因是因为全局变量的使用,
+另一部分原因是破坏了这两个程序的能用性, 因为使用到了外部变量.
+
+在这个时候, 我们已经谈到了 C 语言中的一些传统核心. 由于这个程序的帮助, 现
+在可以在可接受的程序大小内写出一些有用的程序, 如果你为些花了足够长的时间
+来写这个程序, 那么这是个好的方面. 这些习题比前面谈到的程序要稍微的复杂点.
+
+\exercise 写一个程序 \texttt{detab}, 这个程序的功能是用恰当数量的空格来
+替代制表符. 假设一个抽表符表示第 \textit{n} 列, 那么 \textit{n} 应该用
+一个变量还是宏来表示?
+
+\exercise 写一个程序 \texttt{entab}, 这个程序是把字符串中的空格用最少数量
+的制表符来替代. 使用和 \texttt{detab} 中相同的制表停止位. 当使用一个制表符
+或一个空格都可以到达一个制表停止位时, 应该优先用哪一个?
+
+\exercise 写一个程序, 来\begin{myquotation}折叠\end{myquotation}一个过长的
+行, 折叠成两行或更多的短行, 折叠位置是在第 \textit{n} 列之前的最后一个非
+空白符. 确定你的程序在遇到非常长的, 并且在特定列之前没有空白或制表符的行
+时表现得智能点.
+
+\exercise 写一个程序, 将 C 源代码中所有的注释删除. 不要忘记处理被引号包围
+的字符串和字符常量. C 的注释不嵌套.
+
+\exercise 写一个程序, 来检查 C 源代码中最基本的语法错误, 例如未匹配的括号,
+中括号和花括号. 不要忘了引号, 包括号单引号与双引号, 转义序列和注释.(如果 
+你想把这个程序写得通用些的话, 挺难的.)
+

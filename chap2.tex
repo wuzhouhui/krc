@@ -1,0 +1,267 @@
+% vim: ts=4 sts=4 sw=4 et
+% chapter 2
+
+\chapter{类型, 操作符和表达式}\label{chap_toe}
+在一个程序中, 变量和常量是基本的被操作数据对象. 变量的声明列表,
+指明了它们的类型, 也可能指明了它们的初始值. 操作符指明了对它们所进行的操作.
+表达式将变量和常量联合在一直, 产生一个新的值. 一个对象的类型决定了它所能具
+有的值, 以及它们所能进行的操作. 这正是这章要讨论的内容.
+
+ANSI 标准对基本类型与表达式作了一些小小的修改与增添. 对所有的整数都可以添加
+\csigned 与 \cunsigned 修饰符, 以及无符号常量与十六进制字符常量的记号.
+浮点操作可以在单精度范围内完成; 同时也有了双 \clong 来支持扩展精度. 字符串
+常量可以在编译时连接. 枚举成为了语言的一部分, 对于枚举的正式化经历了很长的
+一段时间. 一个对象可以用 \cconst 修饰, 这个修饰符会阻止变量的值被改变.
+对算术类型的自动类型转换支持更多的类型.
+
+\subsection{变量名字}
+虽然我们没有在第 1 章谈到, 但是对变量与符号常量的取名有一些限制. 名字由数
+字与字母组成; 第一个符号必须是字母, 这里所说的字线包含下划线 \verb'"_"';
+它对帮助
+理解长变量名很有帮助. 不要让名字以下划线开始, 这是因为以下划线开始的名字
+常常保留给库函数使用. 大写字母与小写字母是不同的, 所以 \texttt{x} 与 
+\texttt{X} 两个不一样的名字. 传统上, 在 C 语言中, 变量用小写字母, 符号
+常量用大写字母.
+
+在内部名字中, 只有名字的前31个字符才是有意义的. 对于函数名与外部变量名,
+可能少于31个字符, 因为外部名字可能被汇编器和装载器使用, 而语言对此无法控制.
+对于外部名字, 标准只对6个字符和一个单一的大小写保证唯一性. 关键词, 例如
+\cif, \celse, \cint, \cfloat 等等, 是被保留给语言的, 用户不能使用它们给
+变量或函数命名. 它们必须是小写的.
+
+在对变量进行取名时, 根据变量的用途来命名是很好的做法, 而且在印刷上也不容易
+混淆. 我们对局部变量使用短名字, 特别是循环下标, 对外部变量使用长名字.
+
+\subsection{数据类型和大小}
+在 C 语言中只有几种基本类型:
+\cchar      单字节, 在本地字符集上只能存储一个字符
+\cint       一个整数, 典型大小是机器的字长
+\cfloat     单精度浮点型
+\cdouble    双精度浮点型
+另外, 还有很修饰符可以应用到这些基本类型上. \cshort 和 \clong 修饰整数:
+\begin{myverbatim}
+    short int   sh;
+    long int    counter;
+\end{myverbatim}
+在上面的定义中, \cint 可以省略, 如果你本来就想写 \cint 的话.
+
+\cshort 与 \clong 拥有不同的长度; \cint 通常是机器的字长. \cshort 通常是 
+16 位, \cint 既可以是16位也可以是32位. 编译器可以自由选择类型的长度, 唯一
+的要求是 \cshort 与 \cint 至少有16位, \clong 至少32位, \cshort 不能比 \cint 
+长, 同时 \cint 也不能比 \clong 长.
+
+既定符 \csigned 与 \cunsigned 可以应用到 \cchar 或其他整型. \cunsigned 类型
+的数字总是大于等于0, 但最大不能超过或等于$2^n$, $n$ 是变量类型的位长. 
+例如, 因为 \cchar 是8位, 因此 \texttt{unsigned char} 的范围在 0 到 255
+之间, 而 \texttt{signed char} 的范围在 -128 到 127 之间(在一个以二进制补
+码存数的机器上). \cchar 是 \csigned 还是 \cunsigned, 这取决于机器, 但是 
+可打印的字符总是正的.
+
+\texttt{long double} 声明了一个扩展精度浮点数. 同整数一样, 浮点数的字长依赖
+于机器的实现; \cfloat, \cdouble 和 \texttt{long double} 可以表示三种不一样
+的长字.
+
+标准头文件 \texttt{<limits.h>} 和 \texttt{<float.h>} 为所有类型长度定义了符号
+常量, 还包括一些与编译器和机器有关的性质. 这在附录 B 讨论.
+
+\exercise 写一个程序, 确定 \cchar, \cshort, \cint 和 \clong 的表示范围,
+包括 \csigned 和 \cunsigned, 可以通过打印标准头文件中的常量与直接计算得到.
+确定浮点型变量的表示范围, 如果你是通过计算来完成的话, 这会更加难一点.
+
+\subsection{常量}
+一个整型常量, 如 \texttt{1234}, 类型是 \cint. 一个 \clong 的常量要在末尾
+添加 \texttt{l} 或 \texttt{L}, 例如 \texttt{12345678L}; 如果一个整型常量
+过大而无法放在 \cint 的话, 它就会被当成 \clong. 无符号整数要在末尾添加
+\texttt{u} 或 \texttt{U}, 后缀 \texttt{ul} 或 \texttt{UL} 表示 
+\texttt{unsigned long}.
+
+浮点常量包含一个小数点(\texttt{123.4}) 或指数(\texttt{1e-2}), 也有可能
+两者都有; 它们的默认为 \cdouble, 除非显式指明. 后缀 \texttt{f} 或 
+\texttt{F} 表示一个 \cfloat 常量; \texttt{l} 或 \texttt{L} 表示 
+\texttt{long double}.
+
+一个整数的值可以用八进制或十六进制表示, 而不限于十进制. 以 \texttt{0} 开始
+的数字表示八进制数; 以 \texttt{0x} 或 \texttt{0X} 开始的数字表示十六进制.
+十进制数 \texttt{31} 可以写成八进制数 \texttt{037}, 与十六进制数
+\texttt{0x1f} 或 \texttt{0x1F}. 八进制数与十六进制数常量末尾也可以跟一个
+\texttt{L}, 使得它们成为 \clong, 或者 \texttt{U} 使它们成为 \cunsigned;
+\texttt{0XFUL} 表示一个类型为 \texttt{unsigned long}, 值为15(十进制)的常量.
+
+一个字符常量是一个整数, 用一对单引号括起来的字来表示, 例如 \verb"'x'".
+一个字符常量的数值大小是机器字符集中对应字符的值. 例如, 在 ASCII 字符集中
+字符常量 \verb"'0'" 的值为 48, 与数字 0 并没有关系. 如果我们用 \verb"'0'"
+而不是48来表示字符 \verb"'0'" 的值, 那么程序就更加容易阅读, 也独立于特定的
+字符集. 字符常量可以像整数一样参与数学运算, 虽然它们在字符比较中用得最频繁.
+
+特定的字符可以用转义序列来表示, 就像 \verb"\n" 表示换行符; 虽然它们看起来
+像是两个字符, 但其实只表示一个. 另外, 任意一个字节宽度的位模式可以用
+\begin{myverbatim}
+    '\ooo'
+\end{myverbatim}
+来指定. \textit{ooo} 表示1到3个八进制数(0 ... 7), 或者 
+\begin{myverbatim}
+    '\xhh'
+\end{myverbatim}
+\textit{hh} 表示一个或两个十六进制数(0 ... 9, a ... f, A ... F).
+所以我们可以这样写
+\begin{myverbatim}
+    #define VTAB    '\013'  /* ASCII vertical tab */
+    #define BELL    '\007'  /* ASCII bell character */
+\end{myverbatim}
+或者是十六进制:
+\begin{myverbatim}
+    #define VTAB    '\xb'   /* ASCII vertical tab */
+    #define BELL    '\x7'   /* ASCII bell character */
+\end{myverbatim}
+完整的转义序列有:
+
+\begin{tabular}{|c|l|c|l|}
+    \hline
+    \verb"\a"   & alert(bell) character & \verb"\\" & backslash \\
+    \hline
+    \verb"\b"   & backspace             & \verb"\?" & question mark \\
+    \hline
+    \verb"\f"   & formfeed              & \verb"\'"  & single quote  \\
+    \hline 
+    \verb"\n"   & newline               & \verb=\"=  & double quote  \\
+    \hline
+    \verb"\r"   & carriage return       & \verb"\"\textit{ooo} & octal
+    number \\
+    \hline
+    \verb"\t"   & horizontal tab        & \verb"\x"\textit{hh}  &
+    hexadecimal number \\
+    \hline
+    \verb"\v"   & vertical tab          &                       &   \\
+    \hline
+\end{tabular}
+
+字符常量 \verb"\0" 表示值为0的字符, 空字符. 为了强调某些表达式的字符属性,
+我们会使用 \verb"\0", 而不是 0, 虽然空字符的值就是0.
+
+一个\cemph{常量表达式}只牵涉到常量. 这种表达式可以在编译时求值,
+而不是运行时. 常量表达式可以出现在常量可以出现的任何地方, 例如:
+\begin{myverbatim}
+    #define MAXLINE 1000
+    char line[MAXLINE + 1];
+\end{myverbatim}
+或者
+\begin{myverbatim}
+    #define LEAP 1 /* in leap years */
+    int days[31 + 28 + LEAP + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 31];
+\end{myverbatim}
+一个\cemph{字符串常量}, 或者简称\cemph{字面字符串}, 是一个被双引号包围的0
+个或多个字符组成的序列, 例如 
+\begin{myverbatim}
+    "I am a string"
+\end{myverbatim}
+或者 
+\begin{myverbatim}
+    ""  /* 空字符串 */
+\end{myverbatim}
+双引号并不是字符串的组成部分, 仅仅是起分隔作用. 在字符中使用的转义充列同要
+可以出现在字符串中; \verb=\"= 表示双引号. 字符串常量可以在编译时连接:
+\begin{myverbatim}
+    "hello, " "world"
+\end{myverbatim}
+等价于
+\begin{myverbatim}
+    "hello, world"
+\end{myverbatim}
+分割长字符串时非常用用.
+
+从技术上讲, 一个字符串常量是一个字符数组. 在字符串的内部表示中, 在末尾有一
+个空字符 \verb"'\0'", 所以字符串的实际存在空间要比出现在双引号中的字符数量
+要多一个字节. 这种表示法意味着对字符串的长度没有限制, 但是程序为了确定字符
+串的长度, 需要从头遍历到尾才行. 标准库函数 \texttt{strlen(s)} 返回字符串
+参数 \verb"s" 的长度, 不包括末尾的\verb"'\0'". 这是我们自己的版本:
+\begin{myverbatim}
+    /* strlen: return length of s */
+    int strlen(char s[])
+    {
+        int i;
+
+        while (s[i] != '\0')
+            ++i;
+        return i;
+    }
+\end{myverbatim}
+\texttt{strlen} 和其他字符串函数在标准头文件 \verb"<string.h>" 中声明.
+
+注意分别字符常量与只包含一个字符的字符串的区别: \verb"'x'" 与 \verb="x"= 
+是不一样的. 前者是一个整数, 用于产生字母 \textit{x} 在机器字符集的数值.
+后者是一个字符数组, 这个字符数组包含一个字母 \textit{x} 与 \verb"'\0'".
+
+还有一种常量叫作\cemph{枚举常量}. 一个枚举是一个整型常量列表, 例如:
+\begin{myverbatim}
+    enum boolean { NO, YES };
+\end{myverbatim}
+\cenum 的第一个名字的值是0, 第二个是1, 以些类推, 除非显式指明. 如果不是
+所有的值都有显式声明, 那么未显式声明的名字会在最后一个显式声明的基础上
+继续递增, 正如第二个例子:
+\begin{myverbatim}
+    enum escapes { BELL = '\a', BACKSPACE = '\b', TAB = '\t',
+                   NEWLINE = '\n', VTAG = '\v', RETURN = '\r' };
+    enum moths { JAN = 1, FEB, MAR, APR, MAY, JUM,
+                 JUL, AUG, SEP, OCT, NOV, DEC };
+                 /* FEB = 2, MAR = 3, etc. */
+\end{myverbatim}
+不同的枚举类型中是不能出现相同的名字. 在同一个枚举类型中也不能出现相同的
+名字.
+
+枚举类型提供了一个非常方便的方法, 使得常量与名字联系起来, 这是对 
+\verb"#define" 的一种候选方案, 优点是你可以为你为自己产生值. 虽然 \cenum 
+类型的变量可能需要声明, 但是编译器不需要检查你往这个变量里存的是不是一个
+有效的值. 无论如何, 枚举类型的变量提供了检查的机会, 大多数情况下要比
+\verb"#define" 要好. 另外, 调试器可以用枚举类型的符号名来打印枚举变量的值.
+
+\subsection{声明}
+所有的变量在使用前都必需声明, 虽然有些声明可以通过隐式的上下文来做. 一个 
+声明指明了类型, 以及一个或多个此类型的变量, 例如 
+\begin{myverbatim}
+    int lower, upper, step;
+    char c, line[1000];
+\end{myverbatim}
+变量可以以任何风格分布; 上面的声明也可以写成
+\begin{myverbatim}
+    int lower;
+    int upper;
+    int step;
+    char c;
+    char line[1000];
+\end{myverbatim}
+后面这种形式占据了更多的空间, 但是这种形式容易为每一种变量添加声明, 为了 
+方便后面作修改.
+
+一个变量也可以在声明的时候初始化. 如果在变量名的后面跟 着一个等号和一个表
+达式, 表达式提供了一个初始值, 例如:
+\begin{myverbatim}
+    char esc = '\\';
+    int  i = 0;
+    int  limit = MAXLINE + 1;
+    float eps = 1.0e-5;
+\end{myverbatim}
+如果变量不是自动类型的, 那么初始化只做一次, 在概念上要早于程序的运行,
+初始值必需是一个常量. 一个自动类型的变量, 在每次进入函数体或语句块内时, 
+就会显式的初始化一次; 初始值可以是任意的表达式. 外部与静态变量默认初始化
+为0. 未初始化的自动变量的值是未定义的(即垃圾值).
+
+限定符 \cconst 可以应用到任何变量的声明中, 这个限定符用来说明变量的值是不
+可变的. 对于一个数组来说, \cconst 限定符将会使得数组中的每个元素都是不可
+变的.
+\begin{myverbatim}
+    const double e = 2.71828;
+    const char msg[] = "warning: ";
+\end{myverbatim}
+\cconst 也可以用在数组参数中, 指明函数不能修改数组:
+\begin{myverbatim}
+    int strlen(const char[]);
+\end{myverbatim}
+若尝试修改一个 \cconst 类型的变量, 那么结果是依赖于实现的.
+
+\subsection{数学运算符}
+二元的数学运算符有 \verb"+", \verb"-", \verb"*", \verb"/" 以及取模运算符
+\verb"%". 整数的除法会将小数部分截断. 表达式:
+\begin{myverbatim}
+    x % y
+\end{myverbatim}
+
